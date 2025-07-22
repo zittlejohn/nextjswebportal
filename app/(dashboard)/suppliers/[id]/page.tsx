@@ -12,26 +12,26 @@ import {
     Typography,
 } from '@mui/material';
 
-interface DbCustomer {
+interface DbSupplier {
     unique_key: number;
     client?: string;
-    customer_code?: string;
-    customer_name?: string;
-    customer_address_1?: string;
-    customer_address_2?: string;
-    customer_suburb?: string;
-    customer_state?: string;
-    customer_postcode?: string;
-    customer_country?: string;
+    supplier_code?: string;
+    supplier_name?: string;
+    supplier_address_1?: string;
+    supplier_address_2?: string;
+    supplier_suburb?: string;
+    supplier_state?: string;
+    supplier_postcode?: string;
+    supplier_country?: string;
 }
 
-interface CustomersPageProps {
+interface SuppliersPageProps {
     params: Promise<{ id: string }>; // Note: params is now a Promise
 }
 
-export default function CustomersPage({ params }: CustomersPageProps) {
+export default function SuppliersPage({ params }: SuppliersPageProps) {
     const { id } = use(params);
-    const [data, setData] = useState<DbCustomer | null>(null);
+    const [data, setData] = useState<DbSupplier | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
@@ -45,8 +45,8 @@ export default function CustomersPage({ params }: CustomersPageProps) {
             if (!id) return;
 
             try {
-                const { data } = await api.get<DbCustomer>(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webcustomer/${id}`,
+                const { data } = await api.get<DbSupplier>(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/websupplier/${id}`,
                     { httpsAgent }
                 );
                 if (isMounted) {
@@ -68,7 +68,7 @@ export default function CustomersPage({ params }: CustomersPageProps) {
         };
     }, [id]);
 
-    const handleChange = (field: keyof DbCustomer) => (
+    const handleChange = (field: keyof DbSupplier) => (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         if (!data) return;
@@ -81,13 +81,13 @@ export default function CustomersPage({ params }: CustomersPageProps) {
         setSubmitting(true);
         try {
             await api.put(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webcustomer`,
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/websupplier`,
                 data
             );
-            alert('Customer updated successfully');
+            alert('Supplier updated successfully');
         } catch (err) {
             console.error('Submit error', err);
-            alert('Failed to update customer');
+            alert('Failed to update supplier');
         } finally {
             setSubmitting(false);
         }
@@ -114,49 +114,49 @@ export default function CustomersPage({ params }: CustomersPageProps) {
             pr: 0, // optional: remove right padding
         }}>
             <Typography variant="h5" gutterBottom>
-                Edit Customer #{data.customer_code}
+                Edit supplier #{data.supplier_code}
             </Typography>
             <Box component="form" display="flex" flexDirection="column" gap={2} sx={{ mt: 2 }}>
                 <TextField
-                    label="Customer Code"
-                    value={data.customer_code || ''}
+                    label="supplier Code"
+                    value={data.supplier_code || ''}
                     disabled={true}
-                    onChange={handleChange('customer_code')}
+                    onChange={handleChange('supplier_code')}
                 />
                 <TextField
-                    label="Customer Name"
-                    value={data.customer_name || ''}
-                    onChange={handleChange('customer_name')}
+                    label="supplier Name"
+                    value={data.supplier_name || ''}
+                    onChange={handleChange('supplier_name')}
                 />
                 <TextField
                     label="Address Line 1"
-                    value={data.customer_address_1 || ''}
-                    onChange={handleChange('customer_address_1')}
+                    value={data.supplier_address_1 || ''}
+                    onChange={handleChange('supplier_address_1')}
                 />
                 <TextField
                     label="Address Line 2"
-                    value={data.customer_address_2 || ''}
-                    onChange={handleChange('customer_address_2')}
+                    value={data.supplier_address_2 || ''}
+                    onChange={handleChange('supplier_address_2')}
                 />
                 <TextField
                     label="Suburb"
-                    value={data.customer_suburb || ''}
-                    onChange={handleChange('customer_suburb')}
+                    value={data.supplier_suburb || ''}
+                    onChange={handleChange('supplier_suburb')}
                 />
                 <TextField
                     label="State"
-                    value={data.customer_state || ''}
-                    onChange={handleChange('customer_state')}
+                    value={data.supplier_state || ''}
+                    onChange={handleChange('supplier_state')}
                 />
                 <TextField
                     label="Postcode"
-                    value={data.customer_postcode || ''}
-                    onChange={handleChange('customer_postcode')}
+                    value={data.supplier_postcode || ''}
+                    onChange={handleChange('supplier_postcode')}
                 />
                 <TextField
                     label="Country"
-                    value={data.customer_country || ''}
-                    onChange={handleChange('customer_country')}
+                    value={data.supplier_postcode || ''}
+                    onChange={handleChange('supplier_country')}
                 />
 
                 <Button

@@ -4,13 +4,24 @@ import Stack from '@mui/material/Stack';
 import { DashboardLayout, ThemeSwitcher } from '@toolpad/core/DashboardLayout';
 import Copyright from '../components/Copyright';
 import SidebarFooterAccount, { ToolbarAccountOverride } from './SidebarFooterAccount';
+import { Box, GlobalStyles, Typography } from '@mui/material';
 
 function CustomActions() {
   return (
     <Stack direction="row" alignItems="center">
-      <ThemeSwitcher />
-      <ToolbarAccountOverride />
+      {/* <ThemeSwitcher /> */}
+      {/* <ToolbarAccountOverride /> */}
     </Stack>
+  );
+}
+
+function CustomBranding() {
+  return (
+    <Box sx={{ px: 2, py: 1 }}>
+      <Typography variant="h6" noWrap>
+        My Cool App
+      </Typography>
+    </Box>
   );
 }
 

@@ -77,9 +77,9 @@ export function renderAvatar(params: GridCellParams<{ name: string; color: strin
     );
 }
 
-export const customerColumns: GridColDef[] = [
+export const supplierColumns: GridColDef[] = [
     {
-        field: 'customer_code',
+        field: 'supplier_code',
         headerName: 'Code',
         headerAlign: 'left',
         align: 'left',
@@ -87,7 +87,7 @@ export const customerColumns: GridColDef[] = [
         minWidth: 100,
     },
     {
-        field: 'customer_name',
+        field: 'supplier_name',
         headerName: 'Name',
         headerAlign: 'left',
         align: 'left',
@@ -95,7 +95,7 @@ export const customerColumns: GridColDef[] = [
         minWidth: 100,
     },
     {
-        field: 'customer_address_1',
+        field: 'supplier_address_1',
         headerName: 'Address Line 1',
         headerAlign: 'left',
         align: 'left',
@@ -103,7 +103,7 @@ export const customerColumns: GridColDef[] = [
         minWidth: 150,
     },
     {
-        field: 'customer_address_2',
+        field: 'supplier_address_2',
         headerName: 'Address Line 2',
         headerAlign: 'left',
         align: 'left',
@@ -111,7 +111,7 @@ export const customerColumns: GridColDef[] = [
         minWidth: 150,
     },
     {
-        field: 'customer_suburb',
+        field: 'supplier_suburb',
         headerName: 'Suburb',
         headerAlign: 'left',
         align: 'left',
@@ -119,7 +119,7 @@ export const customerColumns: GridColDef[] = [
         minWidth: 150,
     },
     {
-        field: 'customer_state',
+        field: 'supplier_state',
         headerName: 'State',
         headerAlign: 'left',
         align: 'left',
@@ -127,8 +127,8 @@ export const customerColumns: GridColDef[] = [
         minWidth: 150,
     },
     {
-        field: 'customer_postcode',
-        headerName: 'State',
+        field: 'supplier_postcode',
+        headerName: 'Postcode',
         headerAlign: 'left',
         align: 'left',
         flex: 1,

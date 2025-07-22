@@ -12,13 +12,14 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEve
 import { stockColumns } from '@/app/wmsdata/GridStockData';
 import { productColumns } from '@/app/wmsdata/GridProductData';
 import { customerColumns } from '@/app/wmsdata/GridCustomerData';
+import { supplierColumns } from '@/app/wmsdata/GridSupplierData';
 import { useRouter } from 'next/navigation';
 
-export default function CustomersPage() {
+export default function SuppliersPage() {
 
-    const router = useRouter();
     const [data, setData] = useState<any>(null)
     const [searchTerm, setSearchTerm] = useState<string>(''); // Track search input
+    const router = useRouter();
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -48,7 +49,7 @@ export default function CustomersPage() {
 
             try {
                 const { data } = await api.get<any>(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webcustomer`,
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/websupplier`,
                     { httpsAgent },
                 );
 
@@ -72,16 +73,17 @@ export default function CustomersPage() {
     return (
         <PageContainer sx={{ minWidth: '100%' }}>
             <Box sx={{ mb: 2 }}>
-                <Button sx={{ mb: 2 }} variant="contained" onClick={() => router.push(`/customers/create`)}>New Customer</Button>
+                <Button sx={{ mb: 2 }} variant="contained" onClick={() => router.push(`/suppliers/create`)}>New Supplier</Button>
+
                 <TextField
                     fullWidth
-                    label="Search by Customer Name or Code"
+                    label="Search by Supplier Name or Code"
                     variant="outlined"
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
             </Box>
-            {filteredData && <CustomDataGrid rows={filteredData} columns={customerColumns} rowLinkPrefix='customers' />}
+            {filteredData && <CustomDataGrid rows={filteredData} columns={supplierColumns} rowLinkPrefix='suppliers' />}
         </PageContainer>
     );
 }

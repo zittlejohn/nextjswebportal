@@ -10,6 +10,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import CategoryIcon from '@mui/icons-material/Category';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import type { Navigation } from '@toolpad/core/AppProvider';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import { SessionProvider, signIn, signOut } from 'next-auth/react';
 import theme from '../theme';
 import { auth } from '../auth';
@@ -49,6 +50,11 @@ const NAVIGATION: Navigation = [
     icon: <PeopleIcon />,
   },
   {
+    segment: 'suppliers',
+    title: 'Suppliers',
+    icon: <LocalShippingIcon />,
+  },
+  {
     segment: 'audit',
     title: 'Audit',
     icon: <FactCheckIcon />,
@@ -81,6 +87,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <NextAppProvider
               theme={theme}
               navigation={NAVIGATION}
+              branding={{
+                logo: <img src="https://flsa.com.au/wp-content/uploads/2022/04/FLSA-Logo-Cut.png" alt="FLSA logo" />,
+                title: 'Cypher WMS Web Portal',
+                homeUrl: '/',
+              }}
               session={session}
               authentication={AUTHENTICATION}
             >

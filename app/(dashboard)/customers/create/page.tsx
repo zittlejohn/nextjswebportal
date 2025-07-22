@@ -1,6 +1,6 @@
 'use client';
 import { use, useEffect, useState } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import https from 'https';
 import api from '../../../lib/axios';
 import {
@@ -25,85 +25,56 @@ interface DbCustomer {
     customer_country?: string;
 }
 
-interface CustomersPageProps {
-    params: Promise<{ id: string }>; // Note: params is now a Promise
-}
+const initialCustomerState: DbCustomer = {
+    unique_key: 0,
+    client: '',
+    customer_code: '',
+    customer_name: '',
+    customer_address_1: '',
+    customer_address_2: '',
+    customer_suburb: '',
+    customer_state: '',
+    customer_postcode: '',
+    customer_country: '',
+};
 
-export default function CustomersPage({ params }: CustomersPageProps) {
-    const { id } = use(params);
-    const [data, setData] = useState<DbCustomer | null>(null);
-    const [loading, setLoading] = useState(true);
+export default function CustomersPage() {
+    const [data, setData] = useState<DbCustomer>(initialCustomerState);
     const [submitting, setSubmitting] = useState(false);
-
-    useEffect(() => {
-        let isMounted = true;
-
-        async function getData() {
-            const isDev = process.env.NODE_ENV !== 'production';
-            const httpsAgent = isDev ? new https.Agent({ rejectUnauthorized: false }) : undefined;
-
-            if (!id) return;
-
-            try {
-                const { data } = await api.get<DbCustomer>(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webcustomer/${id}`,
-                    { httpsAgent }
-                );
-                if (isMounted) {
-                    setData(data);
-                }
-            } catch (err) {
-                console.error('Data fetch error', err);
-            } finally {
-                if (isMounted) {
-                    setLoading(false);
-                }
-            }
-        }
-
-        getData();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [id]);
+    const router = useRouter();
 
     const handleChange = (field: keyof DbCustomer) => (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         if (!data) return;
-        setData({ ...data, [field]: event.target.value });
+
+        const value =
+            field === 'customer_code'
+                ? event.target.value.toUpperCase()
+                : event.target.value;
+
+        setData({ ...data, [field]: value });
     };
+
 
     const handleSubmit = async () => {
         if (!data) return;
 
         setSubmitting(true);
         try {
-            await api.put(
+            await api.post(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webcustomer`,
                 data
             );
-            alert('Customer updated successfully');
+            alert('Customer added successfully');
+            router.push(`/customers`)
         } catch (err) {
             console.error('Submit error', err);
-            alert('Failed to update customer');
+            alert('Failed to add customer');
         } finally {
             setSubmitting(false);
         }
     };
-
-    if (loading) {
-        return (
-            <Box display="flex" justifyContent="center" mt={4}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
-    if (!data) {
-        return notFound();
-    }
 
     return (
         <Container maxWidth="sm" sx={{
@@ -114,14 +85,16 @@ export default function CustomersPage({ params }: CustomersPageProps) {
             pr: 0, // optional: remove right padding
         }}>
             <Typography variant="h5" gutterBottom>
-                Edit Customer #{data.customer_code}
+                Create New Customer
             </Typography>
             <Box component="form" display="flex" flexDirection="column" gap={2} sx={{ mt: 2 }}>
                 <TextField
                     label="Customer Code"
                     value={data.customer_code || ''}
-                    disabled={true}
                     onChange={handleChange('customer_code')}
+                    InputProps={{
+                        style: { textTransform: 'uppercase' }
+                    }}
                 />
                 <TextField
                     label="Customer Name"
@@ -165,7 +138,7 @@ export default function CustomersPage({ params }: CustomersPageProps) {
                     onClick={handleSubmit}
                     disabled={submitting}
                 >
-                    {submitting ? 'Saving...' : 'Save Changes'}
+                    {submitting ? 'Saving...' : 'Add Customer'}
                 </Button>
             </Box>
         </Container >

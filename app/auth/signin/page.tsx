@@ -27,8 +27,8 @@ function SignUpLink() {
 function DemoInfo() {
   return (
     <Alert severity="info">
-      You can use <strong>toolpad-demo@mui.com</strong> with the password <strong>@demo1</strong> to
-      test
+      You can use <strong>CLIENT_CODE@flsa.com.au</strong> with the password <strong>Abc123!</strong> to
+      test for BALLBA, SKOOP, CALIBRE-TEST, ELEFUT
     </Alert>
   );
 }

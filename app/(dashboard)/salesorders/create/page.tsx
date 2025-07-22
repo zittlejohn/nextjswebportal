@@ -63,41 +63,41 @@ const australianStates = ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'];
 const despatchOptions = ['Warehouse', 'Customer Pickup'];
 
 const SalesOrderPage = () => {
-    // const [details, setDetails] = useState<SalesOrderDetails>({
-    //     clientReference: '',
-    //     customerName: '',
-    //     customerEmail: '',
-    //     customerPhone: '',
-    //     addressLine1: '',
-    //     addressLine2: '',
-    //     suburb: '',
-    //     state: 'VIC',
-    //     postcode: '',
-    //     country: 'Australia',
-    //     specialInstructions: '',
-    //     despatchedBy: 'Warehouse',
-    //     urgent: false,
-    //     urgentFreight: false,
-    //     packingList: null,
-    // });
-
     const [details, setDetails] = useState<SalesOrderDetails>({
-        clientReference: 'DL-1654',
-        customerName: 'Dan Littlejohn',
-        customerEmail: 'dan@flsa.com.au',
-        customerPhone: '0497932480',
-        addressLine1: '31 Koala Street',
+        clientReference: '',
+        customerName: '',
+        customerEmail: '',
+        customerPhone: '',
+        addressLine1: '',
         addressLine2: '',
-        suburb: 'Belgrave',
+        suburb: '',
         state: 'VIC',
-        postcode: '3160',
+        postcode: '',
         country: 'Australia',
-        specialInstructions: 'Please be nice about it',
+        specialInstructions: '',
         despatchedBy: 'Warehouse',
         urgent: false,
         urgentFreight: false,
         packingList: null,
     });
+
+    // const [details, setDetails] = useState<SalesOrderDetails>({
+    //     clientReference: 'DL-1654',
+    //     customerName: 'Dan Littlejohn',
+    //     customerEmail: 'dan@flsa.com.au',
+    //     customerPhone: '0497932480',
+    //     addressLine1: '31 Koala Street',
+    //     addressLine2: '',
+    //     suburb: 'Belgrave',
+    //     state: 'VIC',
+    //     postcode: '3160',
+    //     country: 'Australia',
+    //     specialInstructions: 'Please be nice about it',
+    //     despatchedBy: 'Warehouse',
+    //     urgent: false,
+    //     urgentFreight: false,
+    //     packingList: null,
+    // });
 
     const isDev = process.env.NODE_ENV !== 'production';
     const httpsAgent = isDev ? new https.Agent({ rejectUnauthorized: false }) : undefined;

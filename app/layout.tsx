@@ -88,7 +88,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               theme={theme}
               navigation={NAVIGATION}
               branding={{
-                logo: <img src="https://flsa.com.au/wp-content/uploads/2022/04/FLSA-Logo-Cut.png" alt="FLSA logo" />,
+                logo: <img src="https://flsa.com.au/wp-content/uploads/2022/04/FLSA-Logo-Cut.png" alt="FLSA logo" width={150} />,
                 title: 'Cypher WMS Web Portal',
                 homeUrl: '/',
               }}

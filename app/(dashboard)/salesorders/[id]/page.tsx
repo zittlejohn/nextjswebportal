@@ -76,8 +76,8 @@ const SalesOrderData: React.FC<SalesOrderDataProps> = ({
                                     <Typography variant="body2">{data.orderReleased}</Typography>
                                     <Typography variant="body2"><b>Order Completed:</b></Typography>
                                     <Typography variant="body2">{data.orderCompleted}</Typography>
-                                    <Typography variant="body2"><b>Order Despatched:</b></Typography>
-                                    <Typography variant="body2">{data.orderDespatch}</Typography>
+                                    {/* <Typography variant="body2"><b>Order Despatched:</b></Typography>
+                                    <Typography variant="body2">{data.orderDespatch}</Typography> */}
                                 </CardContent>
                             </Card>
                         </Grid>

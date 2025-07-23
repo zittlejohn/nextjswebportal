@@ -9,9 +9,10 @@ import signIn from './actions';
 function ForgotPasswordLink() {
   return (
     <span>
-      <Link fontSize="0.75rem" href="/auth/forgot-password">
+      <Link fontSize="0.75rem">
         Forgot password?
       </Link>
+      <span> Contact 3pl@flsa.com.au</span>
     </span>
   );
 }
@@ -26,9 +27,8 @@ function SignUpLink() {
 
 function DemoInfo() {
   return (
-    <Alert severity="info">
-      You can use <strong>CLIENT_CODE@flsa.com.au</strong> with the password <strong>Abc123!</strong> to
-      test for BALLBA, SKOOP, CALIBRE-TEST, ELEFUT
+    <Alert severity="info" sx={{ mb: 2, mt: 1 }}>
+      Welcome to the new <strong>Cypher WMS Web Portal.</strong>Please <strong>Login</strong> continue or contact <strong>3pl@flsa.com.au</strong> to setup an account
     </Alert>
   );
 }
@@ -40,8 +40,8 @@ export default function SignIn() {
       signIn={signIn}
       slots={{
         forgotPasswordLink: ForgotPasswordLink,
-        signUpLink: SignUpLink,
-        subtitle: DemoInfo,
+        // signUpLink: SignUpLink,
+        subtitle: DemoInfo
       }}
     />
   );

@@ -5,20 +5,22 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
 
 export default function HighlightedCard() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const router = useRouter();
 
   return (
     <Card sx={{ height: '100%' }} variant="outlined">
       <CardContent>
         {/* <InsightsRoundedIcon /> */}
         <Typography component="h2" variant="subtitle2" gutterBottom sx={{ fontWeight: '600' }}>
-          Explore your data
+          Create a New Sales Order
         </Typography>
         <Typography sx={{ color: 'text.secondary', mb: '8px' }}>
-          Uncover performance and visitor insights with our data wizardry.
+          With our new and improved User Interface for our online portal, users will experience faster performance, easier navigation, and a more streamlined experience overall.
         </Typography>
         <Button
           variant="contained"
@@ -26,8 +28,9 @@ export default function HighlightedCard() {
           color="primary"
           // endIcon={<ChevronRightRoundedIcon />}
           fullWidth={isSmallScreen}
+          onClick={() => router.push(`/salesorders/create`)}
         >
-          Get insights
+          Create Sales Order
         </Button>
       </CardContent>
     </Card>

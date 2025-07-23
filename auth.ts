@@ -12,14 +12,14 @@ import https from 'https';
  * ----------------------------------------------------------------------------------
  */
 const providers: Provider[] = [
-  GitHub({
-    clientId: process.env.GITHUB_CLIENT_ID as string,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-  }),
-  Google({
-    clientId: process.env.GOOGLE_CLIENT_ID as string,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-  }),
+  // GitHub({
+  //   clientId: process.env.GITHUB_CLIENT_ID as string,
+  //   clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+  // }),
+  // Google({
+  //   clientId: process.env.GOOGLE_CLIENT_ID as string,
+  //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+  // }),
   Credentials({
     credentials: {
       email: { label: 'Email Address', type: 'email' },

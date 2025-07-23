@@ -11,6 +11,10 @@ import SessionsChart from '../components/SessionsChart';
 import PageViewsBarChart from '../components/PageViewsBarChart';
 import CustomTreeView from '../components/CustomTreeView';
 import ChartUserByCountry from '../components/ChartUserByCountry';
+import { useEffect, useState } from 'react';
+import https from 'https'
+import api from '../lib/axios'
+import HighlightedCardAlt from '../components/HiglightedCardAlt';
 
 const data: StatCardProps[] = [
   {
@@ -46,6 +50,39 @@ const data: StatCardProps[] = [
 ];
 
 export default function DashboardContent() {
+
+  const [stats, setStats] = useState<any>(null)
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function getData() {
+      const isDev = process.env.NODE_ENV !== 'production';
+      const httpsAgent = isDev ? new https.Agent({ rejectUnauthorized: false }) : undefined;
+
+      try {
+        const { data } = await api.get<StatCardProps[]>(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webstatistics/stats`,
+          { httpsAgent },
+        );
+
+        if (isMounted && data) {
+          setStats(data);
+        }
+      } catch (err) {
+        if (isMounted) {
+          console.error('Data error', err);
+        }
+      }
+    }
+
+    getData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Box
@@ -73,7 +110,7 @@ export default function DashboardContent() {
               Overview
             </Typography>
             <Grid container spacing={2} columns={12} sx={{ mb: (theme) => theme.spacing(2) }}>
-              {data.map((card, index) => (
+              {stats && stats.statCards && stats.statCards.map((card: StatCardProps, index: number) => (
                 <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
                   <StatCard {...card} />
                 </Grid>
@@ -81,24 +118,27 @@ export default function DashboardContent() {
               <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
                 <HighlightedCard />
               </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <SessionsChart />
+              <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+                <HighlightedCardAlt />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <PageViewsBarChart />
+                {stats && <PageViewsBarChart data={stats.barChart} />}
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                {stats && <SessionsChart stats={stats} />}
               </Grid>
             </Grid>
-            <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+            {/* <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
               Details
-            </Typography>
-            <Grid container spacing={2} columns={12}>
+            </Typography> */}
+            {/* <Grid container spacing={2} columns={12}>
               <Grid size={{ xs: 12, lg: 6 }}>
                 <Stack gap={2} direction={{ xs: 'column', sm: 'row' }}>
                   <CustomTreeView />
                   <ChartUserByCountry />
                 </Stack>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
         </Stack>
       </Box>

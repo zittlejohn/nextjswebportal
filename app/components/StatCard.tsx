@@ -17,18 +17,37 @@ export type StatCardProps = {
   data: number[];
 };
 
-function getDaysInMonth(month: number, year: number) {
-  const date = new Date(year, month, 0);
-  const monthName = date.toLocaleDateString('en-US', {
-    month: 'short',
-  });
-  const daysInMonth = date.getDate();
-  const days = [];
-  let i = 1;
-  while (days.length < daysInMonth) {
-    days.push(`${monthName} ${i}`);
-    i += 1;
+// function getDaysInMonth(month: number, year: number) {
+//   const date = new Date(year, month, 0);
+//   const monthName = date.toLocaleDateString('en-US', {
+//     month: 'short',
+//   });
+//   const daysInMonth = date.getDate();
+//   const days = [];
+//   let i = 1;
+//   while (days.length < daysInMonth) {
+//     days.push(`${monthName} ${i}`);
+//     i += 1;
+//   }
+//   return days;
+// }
+
+function getLast30Days(): string[] {
+  const days: string[] = [];
+  const today = new Date();
+
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+
+    const formatted = date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    });
+
+    days.push(formatted); // e.g., 'Jul 22'
   }
+
   return days;
 }
 
@@ -45,7 +64,13 @@ function AreaGradient({ color, id }: { color: string; id: string }) {
 
 export default function StatCard({ title, value, interval, trend, data }: StatCardProps) {
   const theme = useTheme();
-  const daysInWeek = getDaysInMonth(4, 2024);
+
+  // 🔹 Get current month/year (note: JS months are 0-based)
+  const now = new Date();
+  const month = now.getMonth() + 1; // convert 0-based to 1-based
+  const year = now.getFullYear();
+
+  const daysInWeek = getLast30Days()
 
   const trendColors = {
     up: theme.palette.mode === 'light' ? theme.palette.success.main : theme.palette.success.dark,
@@ -61,7 +86,7 @@ export default function StatCard({ title, value, interval, trend, data }: StatCa
 
   const color = labelColors[trend];
   const chartColor = trendColors[trend];
-  const trendValues = { up: '+25%', down: '-25%', neutral: '+5%' };
+  const trendValues = { up: 'Trending Up this Month', down: 'Trending Down this Month', neutral: 'Neutral' };
 
   return (
     <Card variant="outlined" sx={{ height: '100%', flexGrow: 1 }}>

@@ -14,6 +14,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -105,6 +106,7 @@ export default function SalesOrdersPage() {
           value={searchTerm}
           onChange={handleSearchChange}
         />
+        <Typography sx={{ mt: 1 }}>Double Click on a row to view details.</Typography>
       </Box>
 
       {filteredData && <CustomDataGrid rows={filteredData} columns={salesOrderColumns} rowLinkPrefix='salesorders' />}

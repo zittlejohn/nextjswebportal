@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import api from '../../lib/axios'
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import { stockColumns } from '@/app/wmsdata/GridStockData';
 import { productColumns } from '@/app/wmsdata/GridProductData';
 
@@ -77,6 +77,7 @@ export default function ProductsPage() {
                     onChange={handleSearchChange}
                 />
             </Box>
+            <Typography sx={{ mb: 1 }}>Double Click on a row to view details.</Typography>
             {filteredData && <CustomDataGrid rows={filteredData} columns={productColumns} rowLinkPrefix='products' />}
         </PageContainer>
     );

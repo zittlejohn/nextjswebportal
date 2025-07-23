@@ -63,41 +63,41 @@ const australianStates = ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'];
 const despatchOptions = ['Truck', 'LCL', '20 Foot Container Loose', '20 Foot Container Pallets', '40 Foot Container Loose', '40 Foot Container Pallets'];
 
 const PurchaseOrderPage = () => {
-    const [details, setDetails] = useState<SalesOrderDetails>({
-        clientReference: '',
-        customerName: '',
-        customerEmail: '',
-        customerPhone: '',
-        addressLine1: '',
-        addressLine2: '',
-        suburb: '',
-        state: 'VIC',
-        postcode: '',
-        country: 'Australia',
-        specialInstructions: '',
-        despatchedBy: 'Truck',
-        urgent: false,
-        urgentFreight: false,
-        packingList: null,
-    });
-
     // const [details, setDetails] = useState<SalesOrderDetails>({
-    //     clientReference: 'DL-1654',
-    //     customerName: 'Dan Littlejohn',
-    //     customerEmail: 'dan@flsa.com.au',
-    //     customerPhone: '0497932480',
-    //     addressLine1: '31 Koala Street',
+    //     clientReference: '',
+    //     customerName: '',
+    //     customerEmail: '',
+    //     customerPhone: '',
+    //     addressLine1: '',
     //     addressLine2: '',
-    //     suburb: 'Belgrave',
+    //     suburb: '',
     //     state: 'VIC',
-    //     postcode: '3160',
+    //     postcode: '',
     //     country: 'Australia',
-    //     specialInstructions: 'Please be nice about it',
+    //     specialInstructions: '',
     //     despatchedBy: 'Truck',
     //     urgent: false,
     //     urgentFreight: false,
     //     packingList: null,
     // });
+
+    const [details, setDetails] = useState<SalesOrderDetails>({
+        clientReference: 'DL-1654',
+        customerName: 'Dan Littlejohn',
+        customerEmail: 'dan@flsa.com.au',
+        customerPhone: '0497932480',
+        addressLine1: '31 Koala Street',
+        addressLine2: '',
+        suburb: 'Belgrave',
+        state: 'VIC',
+        postcode: '3160',
+        country: 'Australia',
+        specialInstructions: 'Please be nice about it',
+        despatchedBy: 'Truck',
+        urgent: false,
+        urgentFreight: false,
+        packingList: null,
+    });
 
     const isDev = process.env.NODE_ENV !== 'production';
     const httpsAgent = isDev ? new https.Agent({ rejectUnauthorized: false }) : undefined;
@@ -241,7 +241,6 @@ const PurchaseOrderPage = () => {
     const router = useRouter();
 
     const handleSubmit = async () => {
-        // Remove any rows without SKU
         const orderLines = rows
             .filter((row) => row.sku)
             .map(({ options, ...rest }) => rest);
@@ -251,40 +250,53 @@ const PurchaseOrderPage = () => {
             return;
         }
 
-        // Validate each line
         for (let i = 0; i < orderLines.length; i++) {
             const line = orderLines[i];
-
             if (!line.sku || line.sku.trim() === '') {
                 alert(`Line ${i + 1}: SKU is required.`);
                 return;
             }
-
             if (!line.quantity || line.quantity <= 0) {
                 alert(`Line ${i + 1}: Quantity must be greater than 0.`);
                 return;
             }
         }
 
-        const payload = {
-            orderDetails: details,
-            orderLines,
-        };
+        const formData = new FormData();
+        formData.append('orderDetails', JSON.stringify({ ...details, packingList: undefined }));
+        formData.append('orderLines', JSON.stringify(orderLines));
+
+        if (details.packingList) {
+            formData.append('packingList', details.packingList);
+        }
 
         try {
-            const { data } = await api.post<any>(
+            const { data } = await api.post(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webpurchaseorder`,
-                payload,
-                { httpsAgent }
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    httpsAgent,
+                }
             );
 
             alert('Order submitted successfully! Order ID: ' + data.id);
-            router.push(`/salesorders`)
+            router.push(`/purchaseorders`);
 
         } catch (err) {
             console.error('Submission error', err);
             alert('Failed to submit order. See console for details.');
         }
+    };
+
+    const handleRemoveRow = (index: number) => {
+        setRows(prevRows => {
+            const updated = [...prevRows];
+            updated.splice(index, 1);
+            return updated.length > 0 ? updated : [createEmptyRow()]; // Always leave at least one row
+        });
     };
 
     return (
@@ -478,6 +490,7 @@ const PurchaseOrderPage = () => {
                                 <TableCell>SKU Description</TableCell>
                                 <TableCell>Quantity</TableCell>
                                 <TableCell>Unit of Measure</TableCell>
+                                <TableCell>Remove</TableCell>
                                 {/* <TableCell>Batch</TableCell>
                                 <TableCell>Serial Number</TableCell>
                                 <TableCell>SSCC Number</TableCell> */}
@@ -527,6 +540,17 @@ const PurchaseOrderPage = () => {
                                                 <MenuItem key={uom} value={uom}>{uom}</MenuItem>
                                             ))}
                                         </Select>
+                                    </TableCell>
+
+                                    <TableCell sx={{ p: 1 }}>
+                                        <Button
+                                            variant="outlined"
+                                            color="error"
+                                            onClick={() => handleRemoveRow(index)}
+                                            disabled={!row.sku}
+                                        >
+                                            Remove
+                                        </Button>
                                     </TableCell>
 
                                     {/* <TableCell sx={{ p: 1 }}>

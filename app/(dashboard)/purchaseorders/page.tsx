@@ -13,7 +13,8 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
-    TextField, // <-- Import for search
+    TextField,
+    Typography, // <-- Import for search
 } from '@mui/material';
 import { purchaseOrderColumns } from '@/app/wmsdata/GridPurchaseOrdersData';
 import { useRouter } from 'next/navigation';
@@ -105,6 +106,7 @@ export default function PurchaseOrdersPage() {
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
+                <Typography sx={{ mt: 1 }}>Double Click on a row to view details.</Typography>
             </Box>
             {filteredData && <CustomDataGrid rows={filteredData} columns={purchaseOrderColumns} rowLinkPrefix='purchaseorders' />}
         </PageContainer>

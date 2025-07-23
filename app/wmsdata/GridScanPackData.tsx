@@ -104,7 +104,7 @@ export const scanPackDataColumns: GridColDef[] = [
     },
     {
         field: 'container',
-        headerName: 'Container',
+        headerName: 'Container / Carton',
         headerAlign: 'left',
         align: 'left',
         flex: 1,

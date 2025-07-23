@@ -241,7 +241,6 @@ const SalesOrderPage = () => {
     const router = useRouter();
 
     const handleSubmit = async () => {
-        // Remove any rows without SKU
         const orderLines = rows
             .filter((row) => row.sku)
             .map(({ options, ...rest }) => rest);
@@ -251,40 +250,101 @@ const SalesOrderPage = () => {
             return;
         }
 
-        // Validate each line
         for (let i = 0; i < orderLines.length; i++) {
             const line = orderLines[i];
-
             if (!line.sku || line.sku.trim() === '') {
                 alert(`Line ${i + 1}: SKU is required.`);
                 return;
             }
-
             if (!line.quantity || line.quantity <= 0) {
                 alert(`Line ${i + 1}: Quantity must be greater than 0.`);
                 return;
             }
         }
 
-        const payload = {
-            orderDetails: details,
-            orderLines,
-        };
+        const formData = new FormData();
+        formData.append('orderDetails', JSON.stringify({ ...details, packingList: undefined }));
+        formData.append('orderLines', JSON.stringify(orderLines));
+
+        if (details.packingList) {
+            formData.append('packingList', details.packingList);
+        }
 
         try {
-            const { data } = await api.post<any>(
+            const { data } = await api.post(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/websalesorder`,
-                payload,
-                { httpsAgent }
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    httpsAgent,
+                }
             );
 
             alert('Order submitted successfully! Order ID: ' + data.id);
-            router.push(`/salesorders`)
+            router.push(`/salesorders`);
 
         } catch (err) {
             console.error('Submission error', err);
             alert('Failed to submit order. See console for details.');
         }
+    };
+
+
+    // const handleSubmit = async () => {
+    //     // Remove any rows without SKU
+    //     const orderLines = rows
+    //         .filter((row) => row.sku)
+    //         .map(({ options, ...rest }) => rest);
+
+    //     if (orderLines.length === 0) {
+    //         alert('You must add at least one SKU to submit the order.');
+    //         return;
+    //     }
+
+    //     // Validate each line
+    //     for (let i = 0; i < orderLines.length; i++) {
+    //         const line = orderLines[i];
+
+    //         if (!line.sku || line.sku.trim() === '') {
+    //             alert(`Line ${i + 1}: SKU is required.`);
+    //             return;
+    //         }
+
+    //         if (!line.quantity || line.quantity <= 0) {
+    //             alert(`Line ${i + 1}: Quantity must be greater than 0.`);
+    //             return;
+    //         }
+    //     }
+
+    //     const payload = {
+    //         orderDetails: details,
+    //         orderLines,
+    //     };
+
+    //     try {
+    //         const { data } = await api.post<any>(
+    //             `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/websalesorder`,
+    //             payload,
+    //             { httpsAgent }
+    //         );
+
+    //         alert('Order submitted successfully! Order ID: ' + data.id);
+    //         router.push(`/salesorders`)
+
+    //     } catch (err) {
+    //         console.error('Submission error', err);
+    //         alert('Failed to submit order. See console for details.');
+    //     }
+    // };
+
+    const handleRemoveRow = (index: number) => {
+        setRows(prevRows => {
+            const updated = [...prevRows];
+            updated.splice(index, 1);
+            return updated.length > 0 ? updated : [createEmptyRow()]; // Always leave at least one row
+        });
     };
 
     return (
@@ -481,6 +541,7 @@ const SalesOrderPage = () => {
                                 <TableCell>Batch</TableCell>
                                 <TableCell>Serial Number</TableCell>
                                 <TableCell>SSCC Number</TableCell>
+                                <TableCell>Remove</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -566,6 +627,17 @@ const SalesOrderPage = () => {
                                                 <MenuItem key={s} value={s}>{s}</MenuItem>
                                             ))}
                                         </Select>
+                                    </TableCell>
+
+                                    <TableCell sx={{ p: 1 }}>
+                                        <Button
+                                            variant="outlined"
+                                            color="error"
+                                            onClick={() => handleRemoveRow(index)}
+                                            disabled={!row.sku}
+                                        >
+                                            Remove
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}

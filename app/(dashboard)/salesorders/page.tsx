@@ -105,7 +105,7 @@ export default function SalesOrdersPage() {
 
             <TextField
               fullWidth
-              label="Search by Order Number or Client Reference"
+              label="Search by Order Number, Client Reference or Customer Name"
               variant="outlined"
               value={searchTerm}
               onChange={handleSearchChange}

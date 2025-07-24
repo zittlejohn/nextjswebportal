@@ -72,7 +72,7 @@ export default function SalesOrdersPage() {
     return data.filter((row: any) => {
       const orderNumber = row.orderNumber?.toLowerCase() || '';
       const clientReference = row.clientReference?.toLowerCase() || '';
-      const customerName = row.customer_name?.toLowerCase() || '';
+      const customerName = row.customerName?.toLowerCase() || '';
       return orderNumber.includes(term) || clientReference.includes(term) || customerName.includes(term);
     });
   }, [searchTerm, data]);

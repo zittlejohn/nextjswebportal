@@ -240,13 +240,18 @@ const SalesOrderPage = () => {
 
     const router = useRouter();
 
+    const [saving, setSaving] = useState<boolean>(false)
+
     const handleSubmit = async () => {
+        setSaving(true)
+
         const orderLines = rows
             .filter((row) => row.sku)
             .map(({ options, ...rest }) => rest);
 
         if (orderLines.length === 0) {
             alert('You must add at least one SKU to submit the order.');
+            setSaving(false)
             return;
         }
 
@@ -254,10 +259,14 @@ const SalesOrderPage = () => {
             const line = orderLines[i];
             if (!line.sku || line.sku.trim() === '') {
                 alert(`Line ${i + 1}: SKU is required.`);
+                setSaving(false)
+
                 return;
             }
             if (!line.quantity || line.quantity <= 0) {
                 alert(`Line ${i + 1}: Quantity must be greater than 0.`);
+                setSaving(false)
+
                 return;
             }
         }
@@ -284,9 +293,13 @@ const SalesOrderPage = () => {
 
             alert('Order submitted successfully! Order ID: ' + data.id);
             router.push(`/salesorders`);
+            setSaving(false)
+
 
         } catch (err) {
             console.error('Submission error', err);
+            setSaving(false)
+
             alert('Failed to submit order. See console for details.');
         }
     };
@@ -649,6 +662,7 @@ const SalesOrderPage = () => {
                             color="primary"
                             onClick={handleSubmit}
                             sx={{ mb: 2 }}
+                            loading={saving}
                         >
                             Submit Order
                         </Button></Box>

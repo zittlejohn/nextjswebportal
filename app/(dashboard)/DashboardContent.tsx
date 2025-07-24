@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import https from 'https'
 import api from '../lib/axios'
 import HighlightedCardAlt from '../components/HiglightedCardAlt';
+import { CircularProgress } from '@mui/material';
 
 const data: StatCardProps[] = [
   {
@@ -105,33 +106,35 @@ export default function DashboardContent() {
           }}
         >
           <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
-            {/* cards */}
-            <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-              Overview
-            </Typography>
-            <Grid container spacing={2} columns={12} sx={{ mb: (theme) => theme.spacing(2) }}>
-              {stats && stats.statCards && stats.statCards.map((card: StatCardProps, index: number) => (
-                <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
-                  <StatCard {...card} />
+            {stats ?
+              <>
+                {/* cards */}
+                <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+                  Overview
+                </Typography>
+                <Grid container spacing={2} columns={12} sx={{ mb: (theme) => theme.spacing(2) }}>
+                  {stats && stats.statCards && stats.statCards.map((card: StatCardProps, index: number) => (
+                    <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
+                      <StatCard {...card} />
+                    </Grid>
+                  ))}
+                  <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+                    <HighlightedCard />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+                    <HighlightedCardAlt />
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    {stats && <PageViewsBarChart data={stats.barChart} />}
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    {stats && <SessionsChart stats={stats} />}
+                  </Grid>
                 </Grid>
-              ))}
-              <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-                <HighlightedCard />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-                <HighlightedCardAlt />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                {stats && <PageViewsBarChart data={stats.barChart} />}
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                {stats && <SessionsChart stats={stats} />}
-              </Grid>
-            </Grid>
-            {/* <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+                {/* <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
               Details
             </Typography> */}
-            {/* <Grid container spacing={2} columns={12}>
+                {/* <Grid container spacing={2} columns={12}>
               <Grid size={{ xs: 12, lg: 6 }}>
                 <Stack gap={2} direction={{ xs: 'column', sm: 'row' }}>
                   <CustomTreeView />
@@ -139,6 +142,9 @@ export default function DashboardContent() {
                 </Stack>
               </Grid>
             </Grid> */}
+              </>
+              :
+              <><CircularProgress /></>}
           </Box>
         </Stack>
       </Box>

@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import api from '../../lib/axios'
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { stockColumns, stockSummarisedColumns } from '@/app/wmsdata/GridStockData';
 import { Typography, Card, CardContent, List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
 
@@ -74,38 +74,45 @@ export default function StockPage() {
 
     return (
         <PageContainer sx={{ minWidth: '100%' }}>
-            <Box sx={{ mb: 2 }}>
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                    <InputLabel id="demo-simple-select-label">View By</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={value}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value="summarised">Summarised</MenuItem>
-                        <MenuItem value="records">Records</MenuItem>
-                    </Select>
-                </FormControl>
-                <TextField
-                    fullWidth
-                    label="Search by SKU or SKU Description"
-                    variant="outlined"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
-            </Box>
+            {data ?
+                <>
+                    <Box sx={{ mb: 2 }}>
+                        <FormControl fullWidth sx={{ mb: 2 }}>
+                            <InputLabel id="demo-simple-select-label">View By</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={value}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value="summarised">Summarised</MenuItem>
+                                <MenuItem value="records">Records</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField
+                            fullWidth
+                            label="Search by SKU or SKU Description"
+                            variant="outlined"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
+                    </Box>
 
-            {value === 'records' && (
-                <>
-                    {filteredData && <CustomDataGrid rows={filteredData} columns={stockColumns} rowLinkPrefix='' />}
+                    {value === 'records' && (
+                        <>
+                            {filteredData && <CustomDataGrid rows={filteredData} columns={stockColumns} rowLinkPrefix='' />}
+                        </>
+                    )}
+                    {value === 'summarised' && (
+                        <>
+                            {filteredData && <CustomDataGrid rows={filteredData} columns={stockSummarisedColumns} rowLinkPrefix='' />}
+                        </>
+                    )}
                 </>
-            )}
-            {value === 'summarised' && (
+                :
                 <>
-                    {filteredData && <CustomDataGrid rows={filteredData} columns={stockSummarisedColumns} rowLinkPrefix='' />}
-                </>
-            )}
+                    <CircularProgress />
+                </>}
         </PageContainer>
     );
 }

@@ -8,6 +8,7 @@ import api from '../../lib/axios';
 import {
     Box,
     Button,
+    CircularProgress,
     FormControl,
     InputLabel,
     MenuItem,
@@ -81,34 +82,41 @@ export default function PurchaseOrdersPage() {
 
     return (
         <PageContainer sx={{ minWidth: '100%' }}>
-            <Box sx={{ mb: 2 }}>
-                <Button sx={{ mb: 2 }} onClick={() => router.push(`/purchaseorders/create`)} variant="contained">New Purchase Order</Button>
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                    <InputLabel id="demo-simple-select-label">Order Status</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={value}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value="active">Active</MenuItem>
-                        <MenuItem value="unreleased">Unreleased</MenuItem>
-                        <MenuItem value="released">Released</MenuItem>
-                        <MenuItem value="completed">Completed</MenuItem>
-                        <MenuItem value="all">All</MenuItem>
-                    </Select>
-                </FormControl>
+            {data ?
+                <>
+                    <Box sx={{ mb: 2 }}>
+                        <Button sx={{ mb: 2 }} onClick={() => router.push(`/purchaseorders/create`)} variant="contained">New Purchase Order</Button>
+                        <FormControl fullWidth sx={{ mb: 2 }}>
+                            <InputLabel id="demo-simple-select-label">Order Status</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={value}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value="active">Active</MenuItem>
+                                <MenuItem value="unreleased">Unreleased</MenuItem>
+                                <MenuItem value="released">Released</MenuItem>
+                                <MenuItem value="completed">Completed</MenuItem>
+                                <MenuItem value="all">All</MenuItem>
+                            </Select>
+                        </FormControl>
 
-                <TextField
-                    fullWidth
-                    label="Search by Order Number or Client Reference"
-                    variant="outlined"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
-                <Typography sx={{ mt: 1 }}>Double Click on a row to view details.</Typography>
-            </Box>
-            {filteredData && <CustomDataGrid rows={filteredData} columns={purchaseOrderColumns} rowLinkPrefix='purchaseorders' />}
+                        <TextField
+                            fullWidth
+                            label="Search by Order Number or Client Reference"
+                            variant="outlined"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
+                        <Typography sx={{ mt: 1 }}>Double Click on a row to view details.</Typography>
+                    </Box>
+                    {filteredData && <CustomDataGrid rows={filteredData} columns={purchaseOrderColumns} rowLinkPrefix='purchaseorders' />}
+                </>
+                :
+                <>
+                    <CircularProgress />
+                </>}
         </PageContainer>
     );
 }

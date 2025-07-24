@@ -78,7 +78,7 @@ export function renderAvatar(params: GridCellParams<{ name: string; color: strin
 }
 
 export const auditColumns: GridColDef[] = [
-    { field: 'audit_timestamp', headerName: 'Timestamp', headerAlign: 'left', align: 'left', flex: 1, minWidth: 100 },
+    { field: 'audit_timestamp', headerName: 'Date', headerAlign: 'left', align: 'left', flex: 1, minWidth: 100 },
     { field: 'audit_type', headerName: 'Audit Type', headerAlign: 'left', align: 'left', flex: 1, minWidth: 150 },
     { field: 'task', headerName: 'Task', headerAlign: 'left', align: 'left', flex: 1, minWidth: 70 },
     { field: 'from_site', headerName: 'Site', headerAlign: 'left', align: 'left', flex: 1, minWidth: 60 },

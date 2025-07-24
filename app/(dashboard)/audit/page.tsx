@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import api from '../../lib/axios'
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { stockColumns } from '@/app/wmsdata/GridStockData';
 import { productColumns } from '@/app/wmsdata/GridProductData';
 import { customerColumns } from '@/app/wmsdata/GridCustomerData';
@@ -71,16 +71,20 @@ export default function AuditPage() {
 
     return (
         <PageContainer sx={{ minWidth: '100%' }}>
-            <Box sx={{ mb: 2 }}>
-                <TextField
-                    fullWidth
-                    label="Search by Sku, Order Number, Client Reference"
-                    variant="outlined"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
-            </Box>
-            {filteredData && <CustomDataGrid rows={filteredData} columns={auditColumns} rowLinkPrefix='' />}
+            {data ?
+                <>
+                    <Box sx={{ mb: 2 }}>
+                        <TextField
+                            fullWidth
+                            label="Search by Sku, Order Number, Client Reference"
+                            variant="outlined"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
+                    </Box>
+                    {filteredData && <CustomDataGrid rows={filteredData} columns={auditColumns} rowLinkPrefix='' />}</>
+                :
+                <><CircularProgress /></>}
         </PageContainer>
     );
 }

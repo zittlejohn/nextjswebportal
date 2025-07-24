@@ -54,6 +54,7 @@ export interface SalesOrderDetails {
     urgent: boolean;
     urgentFreight: boolean;
     packingList: File | null; // 🔹 NEW
+    estimatedDate: Date | null; // 🔹 NEW
 }
 
 import countries from '../../../lib/countries'
@@ -63,41 +64,42 @@ const australianStates = ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'];
 const despatchOptions = ['Truck', 'LCL', '20 Foot Container Loose', '20 Foot Container Pallets', '40 Foot Container Loose', '40 Foot Container Pallets'];
 
 const PurchaseOrderPage = () => {
+    const [details, setDetails] = useState<SalesOrderDetails>({
+        clientReference: '',
+        customerName: '',
+        customerEmail: '',
+        customerPhone: '',
+        addressLine1: '',
+        addressLine2: '',
+        suburb: '',
+        state: 'VIC',
+        postcode: '',
+        country: 'Australia',
+        specialInstructions: '',
+        despatchedBy: 'Truck',
+        urgent: false,
+        urgentFreight: false,
+        packingList: null,
+        estimatedDate: new Date(),
+    });
+
     // const [details, setDetails] = useState<SalesOrderDetails>({
-    //     clientReference: '',
-    //     customerName: '',
-    //     customerEmail: '',
-    //     customerPhone: '',
-    //     addressLine1: '',
+    //     clientReference: 'DL-1654',
+    //     customerName: 'Dan Littlejohn',
+    //     customerEmail: 'dan@flsa.com.au',
+    //     customerPhone: '0497932480',
+    //     addressLine1: '31 Koala Street',
     //     addressLine2: '',
-    //     suburb: '',
+    //     suburb: 'Belgrave',
     //     state: 'VIC',
-    //     postcode: '',
+    //     postcode: '3160',
     //     country: 'Australia',
-    //     specialInstructions: '',
+    //     specialInstructions: 'Please be nice about it',
     //     despatchedBy: 'Truck',
     //     urgent: false,
     //     urgentFreight: false,
     //     packingList: null,
     // });
-
-    const [details, setDetails] = useState<SalesOrderDetails>({
-        clientReference: 'DL-1654',
-        customerName: 'Dan Littlejohn',
-        customerEmail: 'dan@flsa.com.au',
-        customerPhone: '0497932480',
-        addressLine1: '31 Koala Street',
-        addressLine2: '',
-        suburb: 'Belgrave',
-        state: 'VIC',
-        postcode: '3160',
-        country: 'Australia',
-        specialInstructions: 'Please be nice about it',
-        despatchedBy: 'Truck',
-        urgent: false,
-        urgentFreight: false,
-        packingList: null,
-    });
 
     const isDev = process.env.NODE_ENV !== 'production';
     const httpsAgent = isDev ? new https.Agent({ rejectUnauthorized: false }) : undefined;
@@ -434,6 +436,26 @@ const PurchaseOrderPage = () => {
                             <MenuItem key={option} value={option}>{option}</MenuItem>
                         ))}
                     </Select>
+                </FormControl>
+
+                <FormControl sx={{ mt: 1 }} fullWidth margin="dense">
+                    <InputLabel sx={{ mb: 1 }} shrink htmlFor="estimated-date">Estimated Delivery Date</InputLabel>
+                    <input
+                        id="estimated-date"
+                        type="date"
+                        value={details.estimatedDate instanceof Date
+                            ? details.estimatedDate.toISOString().split('T')[0]
+                            : details.estimatedDate || ''}
+                        onChange={(e) => handleChange('estimatedDate', new Date(e.target.value))}
+                        style={{
+                            padding: '16.5px 14px',
+                            marginTop: '1vh',
+                            border: '1px solid rgba(0, 0, 0, 0.23)',
+                            borderRadius: 4,
+                            width: '100%',
+                            fontSize: '1rem'
+                        }}
+                    />
                 </FormControl>
 
                 {/* <FormControlLabel

@@ -85,7 +85,7 @@ const PurchaseOrderData: React.FC<PurchaseOrderDataProps> = ({
                                 <CardContent>
                                     <Typography variant="h6">Supplier</Typography>
                                     <Typography variant="body2"><b>Supplier Name:</b></Typography>
-                                    <Typography variant="body2">{customerName}</Typography>
+                                    <Typography variant="body2">{data.customerName}</Typography>
                                     <Typography variant="body2"><b>Supplier Address:</b></Typography>
                                     <Typography variant="body2">{data.customerAddress1}, {data.customerAddress2}</Typography>
                                     <Typography variant="body2">{data.customerSuburb}, {data.customerState}, {data.customerPostcode}</Typography>

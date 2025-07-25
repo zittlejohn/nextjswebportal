@@ -47,7 +47,7 @@ const SalesOrderData: React.FC<SalesOrderDataProps> = ({
             {data &&
                 <>
                     <Typography variant="h4" gutterBottom>
-                        📦 Sales Order SO-{id}
+                        📦 Sales Order {data.orderNumber}
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 2 }}>
                         This page displays key details of the Sales Order, all ordered items, their quantities, scan data, serial numbers and fulfillment status.

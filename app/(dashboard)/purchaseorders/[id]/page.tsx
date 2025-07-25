@@ -48,7 +48,7 @@ const PurchaseOrderData: React.FC<PurchaseOrderDataProps> = ({
             {data &&
                 <>
                     <Typography variant="h4" gutterBottom>
-                        📦 Purchase Order PO-{id}
+                        📦 Purchase Order {data.orderNumber}
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 2 }}>
                         This page displays key details of the Purchase Order, all ordered items, their quantities, scan data, serial numbers and fulfillment status.
